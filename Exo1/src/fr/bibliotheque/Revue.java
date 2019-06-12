@@ -2,13 +2,15 @@ package fr.bibliotheque;
 public class Revue extends Document {
 
 	private int mois;
-	private int annee;
+
 	
 	public Revue(int numero, String titre, int mois, int annee) {
 		super(numero, titre);
 		this.mois = mois;
 		this.annee = annee;
 	}
+	
+	private int annee;
 
 	public int getMois() {
 		return mois;
