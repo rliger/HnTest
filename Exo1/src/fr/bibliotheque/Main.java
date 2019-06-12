@@ -1,8 +1,8 @@
+package fr.bibliotheque;
 
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		
 		Bibliotheque michel = new Bibliotheque(7);
 		
@@ -16,7 +16,7 @@ public class Main {
 		
 		michel.ajouter(robert);
 		
-		coco.auteur= "Mike";
+		coco.setAuteur("Mike");
 		
 		michel.ajouter(coco);
 		

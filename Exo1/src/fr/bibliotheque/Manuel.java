@@ -1,3 +1,4 @@
+package fr.bibliotheque;
 
 public class Manuel extends Livre {
 	

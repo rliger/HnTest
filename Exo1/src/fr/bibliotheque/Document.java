@@ -1,3 +1,4 @@
+package fr.bibliotheque;
 
 public abstract class Document {
 	

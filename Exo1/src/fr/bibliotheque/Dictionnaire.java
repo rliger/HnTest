@@ -1,3 +1,4 @@
+package fr.bibliotheque;
 
 public class Dictionnaire extends Document {
 	
