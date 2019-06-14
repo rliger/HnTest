@@ -6,14 +6,15 @@ public class Client {
 	
 	private String nomClient;
 	private String prenomClient;
-	private int numClient;
+	public int numClient;
+	private static int compteur=1;
 	
 	
-	public Client(String nomClient, String prenomClient, int numClient) {
-		super();
+	public Client(String nomClient, String prenomClient) {
 		this.nomClient = nomClient;
 		this.prenomClient = prenomClient;
-		this.numClient = numClient;
+		this.numClient = compteur;
+		compteur ++;
 	}
 
 	
@@ -44,7 +45,7 @@ public class Client {
 
 	@Override
 	public String toString() {
-		return "Client [nomClient=" + nomClient + ", prenomClient=" + prenomClient + ", numClient=" + numClient + "]";
+		return "Client ["+ nomClient + "," + prenomClient + ", numClient=" + numClient + "]";
 	}
 	
 	
