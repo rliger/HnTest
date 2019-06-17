@@ -7,4 +7,12 @@ public class CompteCourant extends Compte {
 		super(libelle, client);
 	}
 
+	@Override
+	public String toString() {
+		return "CompteCourant [libelle=" + libelle + ", solde=" + solde + ", numCompte=" + numCompte + ", client="
+				+ client + "]";
+	}
+	
+	
+
 }

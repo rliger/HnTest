@@ -29,9 +29,22 @@ public abstract class Compte {
 		return solde;
 	}
 
-	public void setSolde(double solde) {
-		this.solde = solde;
+	public void setSolde(Flux f) {
+		if (f.getClass() == Credit.class && this.getNumCompte()==f.getNumCompte()) {
+			this.solde = this.getSolde() + f.getMont();
+		} else if (f.getClass() == Debit.class && this.getNumCompte()==f.getNumCompte()) {
+			this.solde = this.getSolde() - f.getMont();
+		} 
 	}
+	
+	public void setSolde(Virement v) {
+			if (this.getNumCompte() == v.getNumCompte()) {
+				this.solde = this.getSolde() + v.getMont();
+			} else if (this.getNumCompte() == v.getNumCompteEm()) {
+				this.solde = this.getSolde() - v.getMont();
+			}
+	}
+	
 
 	public int getNumCompte() {
 		return numCompte;
