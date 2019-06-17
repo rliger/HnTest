@@ -12,7 +12,8 @@ public abstract class Compte {
 	public Compte(String libelle, Client client) {
 		this.libelle = libelle;
 		this.client = client;
-		this.numCompte = this.compteur;	
+		this.numCompte = this.compteur;
+		this.solde = 0;
 		compteur ++;
 	}
 
