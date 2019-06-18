@@ -15,7 +15,7 @@ public abstract class Flux {
 	
 	public Flux(String com, double mont, int numCompte, boolean effectue) {
 		this.com = com;
-		this.id = this.compteur;
+		this.id = compteur;
 		this.mont = mont;
 		this.numCompte = numCompte;
 		this.effectue = effectue;

@@ -1,5 +1,15 @@
 package Main;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -13,16 +23,27 @@ import composants.Credit;
 import composants.Debit;
 import composants.Virement;
 
+import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+
+
 
 public class Main {
 	
 	private static int compteur=1;
-	public static ArrayList<Client> cClients = new ArrayList<Client>();
-	public static ArrayList<Compte> cComptes = new ArrayList<Compte>();
+	static ArrayList<Client> cClients = new ArrayList<Client>();
+	static ArrayList<Compte> cComptes = new ArrayList<Compte>();
 	
-	public static Hashtable h= new Hashtable();
+	static Hashtable h= new Hashtable();
 	
-	public static ArrayList<Flux> cFlux = new ArrayList<Flux>();
+	static ArrayList<Flux> cFlux = new ArrayList<Flux>();
+	
+	static FileInputStream json = null;
 	
 	
 	public static void main(String[] args) {
@@ -47,15 +68,17 @@ public class Main {
 		
 		//afficherH(h);
 		
-		collecterFlux();
+		//collecterFlux();
+		
+		chargerJson();
 		
 		afficherFlux(cFlux);
 		
 		//cComptes.get(2).setSolde((Virement)cFlux.get(9));
 		
-		appliquerFlux(h, cFlux);
+		//appliquerFlux(h, cFlux);
 		
-		afficherComptes(cComptes);
+		//afficherComptes(cComptes);
 		
 		
 		
@@ -174,6 +197,7 @@ public class Main {
 				if (h.contains(cComptes.get(j))) {
 					if(aL.get(i).getClass()==Virement.class) {
 						cComptes.get(j).setSolde((Virement)aL.get(i));
+						
 					} else {
 						cComptes.get(j).setSolde(aL.get(i));
 					}
@@ -181,4 +205,78 @@ public class Main {
 		    }
 		}
 	}
+	
+	
+	//méthode pour Charger un JSON
+	public static void chargerJson() {
+		JSONParser jsonParser = new JSONParser();
+		Path path = Paths.get("Flux.json");
+
+        try (BufferedReader json = Files.newBufferedReader(path, Charset.forName("UTF-8"))){
+                   
+        	Object obj = jsonParser.parse(json);
+        	
+        	JSONArray fluxTab = (JSONArray) obj;
+            
+            for (int i=0; i<fluxTab.size(); i++) {
+                       
+            	JSONObject fluxObj = (JSONObject) fluxTab.get(i);
+                System.out.println(fluxObj.get("com"));  
+                String com = (String) fluxObj.get("com");                      
+                Double mont= (double)(Long)fluxObj.get("mont");     
+                Integer numCompte = (int)(long) fluxObj.get("numCompte");
+                   
+                if(com.indexOf("débit")>=0) {
+                           
+                	Debit d =new Debit((String) fluxObj.get("com"),(double)(Long) fluxObj.get("mont"),(int)(long) fluxObj.get("numCompte"),false);
+                    cFlux.add(d);
+                   
+                } else {
+                	break;
+                }
+                
+                   
+                /*if(commentaire.indexOf("Credit")>=0) {
+                       
+                    Credit cred3=new Credit(commentaire,montant,numcomptecible,false);       
+                    cFlux.add(cred3);
+                   
+                }
+                   
+                if(commentaire.indexOf("Virement")>=0) {
+                	
+                    Integer numcompteemet = (int) (long) fluxObj.get("numCompteEm");
+                    Virement vir1= new Virement(commentaire,montant,numcomptecible,false, numcompteemet);
+                    cFlux.add(vir1);
+                   
+                }*/
+            }
+
+        } catch (FileNotFoundException e) {
+                e.printStackTrace();
+        } catch (IOException e) {
+                e.printStackTrace();
+        } catch (ParseException e) {
+			e.printStackTrace();
+		}	
+		
+		
+		/*try {
+			json = new FileInputStream(new File("Flux.json"));
+			JSONObject obj = new JSONObject(json);
+			JSONArray arrDebit = obj.getJSONArray("Debit");
+			//JSONArray arrCredit = obj.getJSONArray("Credit");
+			//JSONArray arrVirement = obj.getJSONArray("Virement");
+			for (int i = 0; i < arrDebit.length(); i++) {
+				String com = arrDebit.getJSONObject(i).getString("com");
+	            System.out.println(com);
+				//cFlux.add(new Debit(arrDebit.getJSONObject(i).getString("com"), arrDebit.getJSONObject(i).getDouble("mont"), arrDebit.getJSONObject(i).getInt("numCompte"), arrDebit.getJSONObject(i).getBoolean("effectue")));
+			}
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}*/
+		
+	}
+	
 }

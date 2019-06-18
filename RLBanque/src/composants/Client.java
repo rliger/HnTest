@@ -6,7 +6,7 @@ public class Client {
 	
 	private String nomClient;
 	private String prenomClient;
-	public int numClient;
+	private int numClient;
 	private static int compteur=1;
 	
 	
