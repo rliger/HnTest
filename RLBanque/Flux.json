@@ -1,0 +1,53 @@
+[
+
+		{
+            "com" : "débit",
+            "mont" : "50",
+            "numCompte" : 1,
+            "effectue" : false
+        },
+		{
+            "com" : "crédit",
+            "mont" : "100",
+            "numCompte" : 1,
+            "effectue" : false
+        },
+        {
+            "com" : "crédit",
+            "mont" : "100.50",
+            "numCompte" : 3,
+            "effectue" : false
+        },
+        {
+            "com" : "crédit",
+            "mont" : "100.50",
+            "numCompte" : 5,
+            "effectue" : false
+        },
+        {
+            "com" : "crédit",
+            "mont" : "1500",
+            "numCompte" : 2,
+            "effectue" : false
+        },
+        {
+            "com" : "crédit",
+            "mont" : "1500",
+            "numCompte" : 4,
+            "effectue" : false
+        },
+        {
+            "com" : "crédit",
+            "mont" : "1500",
+            "numCompte" : 6,
+            "effectue" : false
+        },
+		{
+            "com" : "virement",
+            "mont" : "50",
+            "numCompte" : 2,
+            "effectue" : false,
+            "numCompteEm" : 1
+        }
+
+]

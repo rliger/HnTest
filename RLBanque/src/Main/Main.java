@@ -4,15 +4,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.logging.Logger;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import composants.Client;
 import composants.Compte;
@@ -23,12 +25,15 @@ import composants.Credit;
 import composants.Debit;
 import composants.Virement;
 
-import org.jdom2.Element;
-import org.jdom2.input.SAXBuilder;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
 
@@ -52,15 +57,14 @@ public class Main {
 		
 		collecterClients(4);
 		
-		//afficherClients(cClients);
+		afficherClients(cClients);
 		
-		System.out.println("\n-------------------------------------------------------------\n");
 		
-		//collecterClients(3);
 		
-		//afficherClients(cClients);
 		
-		collecterComptes(cClients);
+		//collecterComptes(cClients);
+		
+		chargerXml();
 		
 		afficherComptes(cComptes);
 		
@@ -70,15 +74,14 @@ public class Main {
 		
 		//collecterFlux();
 		
-		chargerJson();
+		//chargerJson();
 		
-		afficherFlux(cFlux);
+		//afficherFlux(cFlux);
 		
-		//cComptes.get(2).setSolde((Virement)cFlux.get(9));
 		
 		//appliquerFlux(h, cFlux);
 		
-		//afficherComptes(cComptes);
+		afficherComptes(cComptes);
 		
 		
 		
@@ -88,7 +91,7 @@ public class Main {
 		
 		/*for(int i = 0; i < cComptes.size(); i++) {
 			if (cComptes.get(i).getClient().getNomClient().equals("nom2")) {
-				System.out.println(cComptes.get(i));
+				LOGGER.info(cComptes.get(i));
 			}
 		}*/
 		
@@ -111,11 +114,11 @@ public class Main {
 	}
 	
 	public static void afficherClients(ArrayList<Client> aL) {
-		System.out.println("\n-------------------------------------------------------------\n");
+		LOGGER.info("\n-------------------------------------------------------------\n");
 		for(int i = 0; i < aL.size(); i++) {
-		    System.out.println(aL.get(i));
+		    LOGGER.info(aL.get(i).toString());
 		}
-		System.out.println("\n-------------------------------------------------------------\n");
+		LOGGER.info("\n-------------------------------------------------------------\n");
 		 
 	}
 	
@@ -129,11 +132,11 @@ public class Main {
 	}
 	
 	public static void afficherComptes(ArrayList<Compte> aL) {
-		System.out.println("\n-------------------------------------------------------------\n");
+		LOGGER.info("\n-------------------------------------------------------------\n");
 		for(int i = 0; i < aL.size(); i++) {
-		    System.out.println(aL.get(i));
+		    LOGGER.info(aL.get(i).toString());
 		}
-		System.out.println("\n-------------------------------------------------------------\n");
+		LOGGER.info("\n-------------------------------------------------------------\n");
 		 
 	}
 	
@@ -151,7 +154,7 @@ public class Main {
 		Enumeration e = h.elements();
 		Enumeration i = h.keys();
 	    while(e.hasMoreElements())
-	      System.out.println(i.nextElement()+" : "+e.nextElement());
+	      LOGGER.info(i.nextElement()+" : "+e.nextElement());
 	}
 	
 	
@@ -183,11 +186,11 @@ public class Main {
 	
 	
 	public static void afficherFlux(ArrayList<Flux> aL) {
-		System.out.println("\n-------------------------------------------------------------\n");
+		LOGGER.info("\n-------------------------------------------------------------\n");
 		for(int i = 0; i < aL.size(); i++) {
-		    System.out.println(aL.get(i));
+		    	LOGGER.info(aL.get(i).toString());
 		}
-		System.out.println("\n-------------------------------------------------------------\n");
+		LOGGER.info("\n-------------------------------------------------------------\n");
 		 
 	}
 	
@@ -206,14 +209,14 @@ public class Main {
 		}
 	}
 	
-	
 	//méthode pour Charger un JSON
 	public static void chargerJson() {
 		JSONParser jsonParser = new JSONParser();
 		Path path = Paths.get("Flux.json");
 
-        try (BufferedReader json = Files.newBufferedReader(path, Charset.forName("UTF-8"))){
-                   
+        try {
+            
+        	BufferedReader json = Files.newBufferedReader(path);
         	Object obj = jsonParser.parse(json);
         	
         	JSONArray fluxTab = (JSONArray) obj;
@@ -221,35 +224,24 @@ public class Main {
             for (int i=0; i<fluxTab.size(); i++) {
                        
             	JSONObject fluxObj = (JSONObject) fluxTab.get(i);
-                System.out.println(fluxObj.get("com"));  
                 String com = (String) fluxObj.get("com");                      
-                Double mont= (double)(Long)fluxObj.get("mont");     
-                Integer numCompte = (int)(long) fluxObj.get("numCompte");
                    
                 if(com.indexOf("débit")>=0) {
                            
-                	Debit d =new Debit((String) fluxObj.get("com"),(double)(Long) fluxObj.get("mont"),(int)(long) fluxObj.get("numCompte"),false);
+                	Debit d =new Debit((String) fluxObj.get("com"),Double.parseDouble((String)fluxObj.get("mont")),(int)(long) fluxObj.get("numCompte"),false);
                     cFlux.add(d);
                    
-                } else {
-                	break;
-                }
-                
-                   
-                /*if(commentaire.indexOf("Credit")>=0) {
-                       
-                    Credit cred3=new Credit(commentaire,montant,numcomptecible,false);       
-                    cFlux.add(cred3);
-                   
-                }
-                   
-                if(commentaire.indexOf("Virement")>=0) {
+                } else if (com.indexOf("crédit")>=0){
                 	
-                    Integer numcompteemet = (int) (long) fluxObj.get("numCompteEm");
-                    Virement vir1= new Virement(commentaire,montant,numcomptecible,false, numcompteemet);
-                    cFlux.add(vir1);
+                	Credit c =new Credit((String) fluxObj.get("com"),Double.parseDouble((String)fluxObj.get("mont")),(int)(long) fluxObj.get("numCompte"),false);
+                    cFlux.add(c);
+              
+                } else if (com.indexOf("virement")>=0) {
+                	
+                	Virement v =new Virement((String) fluxObj.get("com"),Double.parseDouble((String)fluxObj.get("mont")),(int)(long) fluxObj.get("numCompte"),false, (int)(long) fluxObj.get("numCompteEm"));
+                    cFlux.add(v);
+                }       
                    
-                }*/
             }
 
         } catch (FileNotFoundException e) {
@@ -259,24 +251,62 @@ public class Main {
         } catch (ParseException e) {
 			e.printStackTrace();
 		}	
-		
-		
-		/*try {
-			json = new FileInputStream(new File("Flux.json"));
-			JSONObject obj = new JSONObject(json);
-			JSONArray arrDebit = obj.getJSONArray("Debit");
-			//JSONArray arrCredit = obj.getJSONArray("Credit");
-			//JSONArray arrVirement = obj.getJSONArray("Virement");
-			for (int i = 0; i < arrDebit.length(); i++) {
-				String com = arrDebit.getJSONObject(i).getString("com");
-	            System.out.println(com);
-				//cFlux.add(new Debit(arrDebit.getJSONObject(i).getString("com"), arrDebit.getJSONObject(i).getDouble("mont"), arrDebit.getJSONObject(i).getInt("numCompte"), arrDebit.getJSONObject(i).getBoolean("effectue")));
-			}
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}*/
-		
 	}
 	
+	
+	//méthode pour Charger un XML
+	public static void chargerXml() {
+		 try {
+
+				File fXmlFile = new File("Comptes.xml");
+				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+				Document doc = dBuilder.parse(fXmlFile);
+						
+				
+				doc.getDocumentElement().normalize();
+
+				LOGGER.info("Root element :" + doc.getDocumentElement().getNodeName());
+						
+				NodeList listeCc = doc.getElementsByTagName("CompteCourant");
+				NodeList listeCe = doc.getElementsByTagName("CompteEpargne");
+				
+				for (int i=0; i<listeCc.getLength();i++) {
+					
+					Node cC = listeCc.item(i);
+					Element e = (Element) cC;
+					LOGGER.info(e.getElementsByTagName("nomClient").item(0).getTextContent());
+					Client client = new Client(e.getElementsByTagName("nomClient").item(0).getTextContent(), e.getElementsByTagName("prenomClient").item(0).getTextContent());
+					CompteCourant c = new CompteCourant(e.getElementsByTagName("libelle").item(0).getTextContent(), client);
+					if (e.getElementsByTagName("solde").item(0).getTextContent()!="") {
+						Credit f = new Credit(null, Double.parseDouble((String)e.getElementsByTagName("solde").item(0).getTextContent()), c.getNumCompte(), false);
+						c.setSolde(f);
+					}
+					cComptes.add(c);
+					
+					
+				}
+
+				for (int i=0; i<listeCe.getLength();i++) {
+					
+					Node cE = listeCe.item(i);
+					Element e = (Element) cE;
+					LOGGER.info(e.getElementsByTagName("nomClient").item(0).getTextContent());
+					Client client = new Client(e.getElementsByTagName("nomClient").item(0).getTextContent(), e.getElementsByTagName("prenomClient").item(0).getTextContent());
+					CompteEpargne c = new CompteEpargne(e.getElementsByTagName("libelle").item(0).getTextContent(), client);
+					if (e.getElementsByTagName("solde").item(0).getTextContent()!=("")) {
+						Credit f = new Credit(null, Double.parseDouble((String)e.getElementsByTagName("solde").item(0).getTextContent()), c.getNumCompte(), false);
+						c.setSolde(f);
+					}
+					cComptes.add(c);
+					
+					
+				}		
+			
+			    } catch (Exception e) {
+				e.printStackTra)ce();
+			    }
+	}
+	
+	private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 }

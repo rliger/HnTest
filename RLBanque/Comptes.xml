@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Compte>
+   <CompteCourant>
+      <libelle>mm</libelle>
+      <solde></solde>
+      <Client>
+        <nomClient>DUPONT</nomClient>
+        <prenomClient>Martin</prenomClient>
+      </Client>
+   </CompteCourant>
+   <CompteEpargne>
+      <libelle></libelle>
+      <solde></solde>
+      <Client>
+        <nomClient>MBAPPE</nomClient>
+        <prenomClient>Kylian</prenomClient>
+      </Client>
+   </CompteEpargne>
+   <CompteCourant>
+      <libelle></libelle>
+      <solde>50.4</solde>
+      <Client>
+        <nomClient>BOURNE</nomClient>
+        <prenomClient>Jason</prenomClient>
+      </Client>
+   </CompteCourant>
+</Compte>
