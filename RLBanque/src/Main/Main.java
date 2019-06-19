@@ -59,10 +59,21 @@ public class Main {
 		
 		afficherClients(cClients);
 		
+		collecterComptes(cClients);
 		
+		afficherComptes(cComptes);
 		
+		creationH(cComptes);
 		
-		//collecterComptes(cClients);
+		afficherH(h);
+		
+		collecterFlux();
+		
+		afficherFlux(cFlux);
+		
+		appliquerFlux(h, cFlux);
+		
+		afficherComptes(cComptes);
 		
 		chargerXml();
 		
@@ -70,30 +81,15 @@ public class Main {
 		
 		creationH(cComptes);
 		
-		//afficherH(h);
+		afficherH(h);
 		
-		//collecterFlux();
+		chargerJson();
 		
-		//chargerJson();
-		
-		//afficherFlux(cFlux);
-		
-		
-		//appliquerFlux(h, cFlux);
+		afficherFlux(cFlux);
+				
+		appliquerFlux(h, cFlux);
 		
 		afficherComptes(cComptes);
-		
-		
-		
-		
-		
-		
-		
-		/*for(int i = 0; i < cComptes.size(); i++) {
-			if (cComptes.get(i).getClient().getNomClient().equals("nom2")) {
-				LOGGER.info(cComptes.get(i));
-			}
-		}*/
 		
 		
 	}
@@ -116,7 +112,8 @@ public class Main {
 	public static void afficherClients(ArrayList<Client> aL) {
 		LOGGER.info("\n-------------------------------------------------------------\n");
 		for(int i = 0; i < aL.size(); i++) {
-		    LOGGER.info(aL.get(i).toString());
+			String str = aL.get(i).toString();
+		    LOGGER.info(str);
 		}
 		LOGGER.info("\n-------------------------------------------------------------\n");
 		 
@@ -134,7 +131,8 @@ public class Main {
 	public static void afficherComptes(ArrayList<Compte> aL) {
 		LOGGER.info("\n-------------------------------------------------------------\n");
 		for(int i = 0; i < aL.size(); i++) {
-		    LOGGER.info(aL.get(i).toString());
+			String str = aL.get(i).toString();
+		    LOGGER.info(str);
 		}
 		LOGGER.info("\n-------------------------------------------------------------\n");
 		 
@@ -154,7 +152,7 @@ public class Main {
 		Enumeration e = h.elements();
 		Enumeration i = h.keys();
 	    while(e.hasMoreElements())
-	      LOGGER.info(i.nextElement()+" : "+e.nextElement());
+	    	LOGGER.info(i.nextElement()+" : "+e.nextElement());
 	}
 	
 	
@@ -188,7 +186,8 @@ public class Main {
 	public static void afficherFlux(ArrayList<Flux> aL) {
 		LOGGER.info("\n-------------------------------------------------------------\n");
 		for(int i = 0; i < aL.size(); i++) {
-		    	LOGGER.info(aL.get(i).toString());
+			String str = aL.get(i).toString();
+		    LOGGER.info(str);
 		}
 		LOGGER.info("\n-------------------------------------------------------------\n");
 		 
@@ -249,7 +248,7 @@ public class Main {
         } catch (IOException e) {
                 e.printStackTrace();
         } catch (ParseException e) {
-			e.printStackTrace();
+				e.printStackTrace();
 		}	
 	}
 	
@@ -266,7 +265,6 @@ public class Main {
 				
 				doc.getDocumentElement().normalize();
 
-				LOGGER.info("Root element :" + doc.getDocumentElement().getNodeName());
 						
 				NodeList listeCc = doc.getElementsByTagName("CompteCourant");
 				NodeList listeCe = doc.getElementsByTagName("CompteEpargne");
@@ -275,7 +273,6 @@ public class Main {
 					
 					Node cC = listeCc.item(i);
 					Element e = (Element) cC;
-					LOGGER.info(e.getElementsByTagName("nomClient").item(0).getTextContent());
 					Client client = new Client(e.getElementsByTagName("nomClient").item(0).getTextContent(), e.getElementsByTagName("prenomClient").item(0).getTextContent());
 					CompteCourant c = new CompteCourant(e.getElementsByTagName("libelle").item(0).getTextContent(), client);
 					if (e.getElementsByTagName("solde").item(0).getTextContent()!="") {
@@ -291,7 +288,6 @@ public class Main {
 					
 					Node cE = listeCe.item(i);
 					Element e = (Element) cE;
-					LOGGER.info(e.getElementsByTagName("nomClient").item(0).getTextContent());
 					Client client = new Client(e.getElementsByTagName("nomClient").item(0).getTextContent(), e.getElementsByTagName("prenomClient").item(0).getTextContent());
 					CompteEpargne c = new CompteEpargne(e.getElementsByTagName("libelle").item(0).getTextContent(), client);
 					if (e.getElementsByTagName("solde").item(0).getTextContent()!=("")) {
@@ -304,7 +300,7 @@ public class Main {
 				}		
 			
 			    } catch (Exception e) {
-				e.printStackTra)ce();
+				e.printStackTrace();
 			    }
 	}
 	
